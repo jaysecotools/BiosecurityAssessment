@@ -36,7 +36,7 @@ function calculateRiskScore() {
     document.getElementById('risk-level').textContent = riskLevel;
 
     generateRecommendations(); // Ensure recommendations display
-    updateRadarChart(); // Update radar chart with new data
+    updateRadarChart(); // Ensure radar chart updates
 }
 
 // Function to generate recommendations based on slider values
@@ -59,42 +59,44 @@ function generateRecommendations() {
     }
 
     const recommendationsDiv = document.getElementById('recommendations');
-    recommendationsDiv.innerHTML = `<ul>${recommendations.map(rec => `<li>${rec}</li>`).join("")}</ul>`;
+    recommendationsDiv.innerHTML = recommendations.length
+        ? `<ul>${recommendations.map(rec => `<li>${rec}</li>`).join("")}</ul>`
+        : "<p>No recommendations at this time.</p>";
 }
 
 // Function to update radar chart
 function updateRadarChart() {
     const ctx = document.getElementById('biosecurity-chart').getContext('2d');
-    const data = {
-        labels: [
-            "Invasive Species Risk",
-            "Pathogen Spread Risk",
-            "Contamination Risk",
-            "Transportation Risk",
-            "Quarantine Breach Risk"
-        ],
-        datasets: [{
-            label: "Biosecurity Metrics",
-            data: [
-                parseInt(document.getElementById('invasive-species').value) || 0,
-                parseInt(document.getElementById('pathogen-spread').value) || 0,
-                parseInt(document.getElementById('contamination-risk').value) || 0,
-                parseInt(document.getElementById('transportation-risk').value) || 0,
-                parseInt(document.getElementById('quarantine-breach').value) || 0
-            ],
-            backgroundColor: "rgba(0, 123, 143, 0.4)",
-            borderColor: "rgba(0, 123, 143, 1)",
-            borderWidth: 2
-        }]
-    };
+    const chartData = [
+        parseInt(document.getElementById('invasive-species').value) || 0,
+        parseInt(document.getElementById('pathogen-spread').value) || 0,
+        parseInt(document.getElementById('contamination-risk').value) || 0,
+        parseInt(document.getElementById('transportation-risk').value) || 0,
+        parseInt(document.getElementById('quarantine-breach').value) || 0,
+    ];
 
     if (window.biosecurityChart) {
-        window.biosecurityChart.data = data;
+        window.biosecurityChart.data.datasets[0].data = chartData;
         window.biosecurityChart.update();
     } else {
         window.biosecurityChart = new Chart(ctx, {
             type: "radar",
-            data: data,
+            data: {
+                labels: [
+                    "Invasive Species Risk",
+                    "Pathogen Spread Risk",
+                    "Contamination Risk",
+                    "Transportation Risk",
+                    "Quarantine Breach Risk"
+                ],
+                datasets: [{
+                    label: "Biosecurity Metrics",
+                    data: chartData,
+                    backgroundColor: "rgba(0, 123, 143, 0.4)",
+                    borderColor: "rgba(0, 123, 143, 1)",
+                    borderWidth: 2
+                }]
+            },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
@@ -120,7 +122,7 @@ function clearData() {
     // Reset risk score and recommendations
     document.getElementById('risk-score').textContent = '0';
     document.getElementById('risk-level').textContent = 'Low Risk';
-    document.getElementById('recommendations').innerHTML = '';
+    document.getElementById('recommendations').innerHTML = '<p>No recommendations at this time.</p>';
 
     // Reset the radar chart
     if (window.biosecurityChart) {
