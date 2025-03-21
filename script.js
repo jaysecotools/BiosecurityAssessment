@@ -36,7 +36,7 @@ function calculateRiskScore() {
     document.getElementById('risk-level').textContent = riskLevel;
 
     generateRecommendations();
-    updateRadarChart();
+    updateRadarChart(); // Ensures the radar chart updates correctly
 }
 
 // Function to generate recommendations based on slider values
@@ -76,11 +76,11 @@ function updateRadarChart() {
         datasets: [{
             label: "Biosecurity Metrics",
             data: [
-                document.getElementById('invasive-species').value,
-                document.getElementById('pathogen-spread').value,
-                document.getElementById('contamination-risk').value,
-                document.getElementById('transportation-risk').value,
-                document.getElementById('quarantine-breach').value
+                parseInt(document.getElementById('invasive-species').value),
+                parseInt(document.getElementById('pathogen-spread').value),
+                parseInt(document.getElementById('contamination-risk').value),
+                parseInt(document.getElementById('transportation-risk').value),
+                parseInt(document.getElementById('quarantine-breach').value)
             ],
             backgroundColor: "rgba(0, 123, 143, 0.4)",
             borderColor: "rgba(0, 123, 143, 1)",
@@ -104,13 +104,30 @@ function updateRadarChart() {
     }
 }
 
-// Event Listeners for Sliders
-document.querySelectorAll('input[type="range"]').forEach(slider => {
-    slider.addEventListener('input', () => {
-        updateRiskValues(slider.id, `${slider.id}-value`);
-        calculateRiskScore();
+// Function to reset all form inputs and clear the chart and recommendations
+function clearData() {
+    document.querySelectorAll('input, textarea').forEach(input => {
+        if (input.type === 'range') {
+            input.value = 0;
+            updateRiskValues(input.id, `${input.id}-value`);
+        } else {
+            input.value = '';
+        }
     });
-});
+
+    // Reset risk score and recommendations
+    document.getElementById('risk-score').textContent = '0';
+    document.getElementById('risk-level').textContent = 'Low Risk';
+    document.getElementById('recommendations').innerHTML = '';
+
+    // Reset the radar chart
+    if (window.biosecurityChart) {
+        window.biosecurityChart.destroy();
+        window.biosecurityChart = null;
+    }
+}
+
+document.getElementById('delete-data').addEventListener('click', clearData);
 
 // Function to export data as CSV
 function exportCSV() {
@@ -135,7 +152,7 @@ function exportCSV() {
 
 document.getElementById('save-local').addEventListener('click', exportCSV);
 
-// Function to generate PDF report
+// Function to generate PDF report with user-defined file name
 function exportPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
@@ -162,7 +179,11 @@ function exportPDF() {
     doc.text("Recommendations:", 10, 170);
     doc.text(recommendations, 10, 180);
 
-    doc.save("biosecurity-risk-assessment.pdf");
+    // Prompt user for file name
+    const fileName = prompt("Enter a name for your PDF file:", "biosecurity-risk-assessment");
+    if (fileName) {
+        doc.save(`${fileName}.pdf`);
+    }
 }
 
 document.getElementById('generate-report').addEventListener('click', exportPDF);
