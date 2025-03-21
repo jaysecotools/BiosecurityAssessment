@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biosecurity Risk Assessment Tool</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Biosecurity Risk Assessment Tool</h1>
+        </header>
+
+        <!-- Project Details Section -->
+        <section class="card">
+            <h2>Project Details</h2>
+            <form id="project-details-form">
+                <label for="project-name">Project Name:</label>
+                <input type="text" id="project-name" placeholder="Enter the project name" required>
+
+                <label for="location">Location:</label>
+                <input type="text" id="location" placeholder="e.g., GPS coordinates or address" required>
+
+                <label for="assessor-name">Assessor Name:</label>
+                <input type="text" id="assessor-name" placeholder="Enter the assessor's name" required>
+
+                <label for="date">Date of Assessment:</label>
+                <input type="date" id="date" required>
+            </form>
+        </section>
+
+        <!-- Site Information Section -->
+        <section class="card">
+            <h2>Site Information</h2>
+            <form>
+                <label for="flora-fauna">Observed Flora & Fauna:</label>
+                <textarea id="flora-fauna" rows="3" placeholder="List observed species here..."></textarea>
+
+                <label for="biosecurity-plan">Biosecurity Measures:</label>
+                <textarea id="biosecurity-plan" rows="4" placeholder="E.g., decontamination protocols, quarantine practices..."></textarea>
+            </form>
+        </section>
+
+        <!-- Activities Section -->
+        <section class="card">
+            <h2>Activities</h2>
+            <ul>
+                <li><input type="checkbox" value="Invasive Species Control"> Invasive Species Control</li>
+                <li><input type="checkbox" value="Pathogen Containment"> Pathogen Containment</li>
+                <li><input type="checkbox" value="Risk Assessment Monitoring"> Risk Assessment Monitoring</li>
+                <li><input type="checkbox" value="Quarantine Enforcement"> Quarantine Enforcement</li>
+            </ul>
+        </section>
+
+        <!-- Biosecurity Risk Assessment Section -->
+        <section class="card">
+            <h2>Biosecurity Risk Assessment</h2>
+            <div>
+                <label for="invasive-species">Invasive Species Risk:</label>
+                <input type="range" id="invasive-species" min="0" max="100" value="0">
+                <output id="invasive-species-value">0</output>
+            </div>
+            <div>
+                <label for="pathogen-spread">Pathogen Spread Risk:</label>
+                <input type="range" id="pathogen-spread" min="0" max="100" value="0">
+                <output id="pathogen-spread-value">0</output>
+            </div>
+            <div>
+                <label for="contamination-risk">Contamination Risk:</label>
+                <input type="range" id="contamination-risk" min="0" max="100" value="0">
+                <output id="contamination-risk-value">0</output>
+            </div>
+            <div>
+                <label for="transportation-risk">Transportation Risk:</label>
+                <input type="range" id="transportation-risk" min="0" max="100" value="0">
+                <output id="transportation-risk-value">0</output>
+            </div>
+            <div>
+                <label for="quarantine-breach">Quarantine Breach Risk:</label>
+                <input type="range" id="quarantine-breach" min="0" max="100" value="0">
+                <output id="quarantine-breach-value">0</output>
+            </div>
+        </section>
+
+        <!-- Risk Score Section -->
+        <section class="card">
+            <h2>Total Biosecurity Risk</h2>
+            <p><strong>Risk Score:</strong> <span id="risk-score">0</span> (<span id="risk-level">Low Risk</span>)</p>
+            <canvas id="biosecurity-chart"></canvas>
+        </section>
+
+        <!-- Recommendations Section -->
+        <section class="card">
+            <h2>Recommendations</h2>
+            <div id="recommendations"></div>
+        </section>
+
+        <!-- Action Buttons -->
+        <section class="card">
+            <button id="generate-report" class="button">Generate PDF Report</button>
+            <button id="save-local" class="button">Save to CSV</button>
+            <button id="delete-data" class="button" style="background-color: #c84f43;">Clear Data</button>
+        </section>
+
+        <!-- Disclaimer Section -->
+        <section class="card disclaimer">
+            <p>
+                Disclaimer: This tool is intended for informational purposes only. Users are responsible for ensuring regulatory compliance and accuracy of data provided.
+            </p>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>Developed by Jay Rowley 2025</p>
+        </footer>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
